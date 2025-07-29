@@ -13,4 +13,4 @@ wheels/
 .env
 
 # Database
-db.sqlite3
+src/db.sqlite3
