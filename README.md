@@ -1,4 +1,4 @@
-# Django Docker Project
+# Django Docker Container
 
 ## Django application run in Docker container
 
