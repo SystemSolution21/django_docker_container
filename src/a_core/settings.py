@@ -13,14 +13,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 
-from dotenv import load_dotenv
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-# Load environment variables from .env file
-DOTENV_DIR = BASE_DIR.parent / ".env"
-load_dotenv(DOTENV_DIR)
 
 # Project title displayed in the header
 PROJECT_TITLE = "Django Docker Container"
@@ -29,11 +23,14 @@ PROJECT_TITLE = "Django Docker Container"
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", "False").lower() == "true"
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "*"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
-CSRF_TRUSTED_ORIGINS = ["https://*"]
+# The port is 8001 because that's what's mapped in docker-compose.yml
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:8001",
+]
 
 
 # Application definition
@@ -107,7 +104,7 @@ WSGI_APPLICATION = "a_core.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "NAME": "/app/db/db.sqlite3",
     }
 }
 
