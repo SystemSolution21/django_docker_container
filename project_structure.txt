@@ -1,0 +1,25 @@
+django_docker_container/
+├── .gitignore            # Specifies what to exclude from version control
+├── .dockerignore         # Specifies what to exclude from the Docker image
+├── .env.example          # Example environment variables
+├── docker-compose.yml    # Defines and runs the multi-container application
+├── Dockerfile            # Instructions to build the Django application image
+├── README.md             # Project setup and usage instructions
+├── requirements.txt      # Project dependencies for uv
+└── src/                  # Contains all Django source code
+    ├── manage.py
+    ├── my_project/       # The Django project
+    │   ├── __init__.py
+    │   ├── asgi.py
+    │   ├── settings.py   # Configured for Docker and environment variables
+    │   ├── urls.py
+    │   └── wsgi.py
+    └── my_app/           # A sample Django app
+        ├── __init__.py
+        ├── admin.py
+        ├── apps.py
+        ├── migrations/
+        │   └── __init__.py
+        ├── models.py
+        ├── tests.py
+        └── views.py
