@@ -23,4 +23,4 @@ This project is a **modern and well-structured for a Django web application**, d
 
 **3.Robust User Authentication:** It integrates `django-allauth`, a comprehensive package that handles user registration, login, password management, and social account authentication right out of the box.
 
-**4.Dynamic Homepage Content:** The homepage content is managed dynamically through the Django admin panel. A `HomePageContent` model allows an administrator to create and edit the content in Markdown format, which is then retrieved from the database and rendered on the fly. This provides a flexible and powerful way to manage site content without changing code.
+**4.Rich Content Management:** The homepage content is managed dynamically through the Django admin panel. By integrating `django-tinymce`, the `HomePageContent` model provides a full WYSIWYG (What You See Is What You Get) editor, allowing administrators to create and edit rich HTML content without writing any code.

@@ -14,22 +14,27 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path, include
-from django.conf.urls.static import static
+
 from django.conf import settings
+from django.conf.urls.static import static
+from django.contrib import admin
+from django.urls import include, path
+
 from a_users.views import profile_view
-from a_home.views import *
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('accounts/', include('allauth.urls')),
-    path('', include('a_home.urls')),
-    path('profile/', include('a_users.urls')),
-    path('@<username>/', profile_view, name="profile"),
+    # Django admin
+    path("admin/", admin.site.urls),
+    # Third-party apps
+    path("accounts/", include("allauth.urls")),
+    path("tinymce/", include("tinymce.urls")),
+    # My apps
+    path("profile/", include("a_users.urls")),
+    path("@<username>/", profile_view, name="profile"),
+    path("", include("a_home.urls")),  # Keep this last
 ]
 
-# Only used when DEBUG=True, whitenoise can serve files when DEBUG=False
+# Only for development: serve media files and enable browser reload
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += [

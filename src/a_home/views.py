@@ -1,4 +1,3 @@
-import markdown
 from django.shortcuts import render
 
 from .models import HomePageContent
@@ -14,9 +13,8 @@ def home_view(request):
     )
 
     if page_content:
-        html_content = markdown.markdown(
-            text=page_content.content, extensions=["fenced_code"]
-        )
+        # The content from TinyMCE is already HTML, so no conversion is needed.
+        html_content = page_content.content
     else:
         # Set a default message if no content was found.
         html_content = "<h1>Welcome!</h1><p>No active home page content found. Please create one in the admin panel.</p>"

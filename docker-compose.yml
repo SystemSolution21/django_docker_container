@@ -10,6 +10,8 @@ services:
       - ./.env.dev
     volumes:
       - ./src/:/app/
+      - ./pyproject.toml:/app/pyproject.toml
+      - ./uv.lock:/app/uv.lock
       - venv:/app/.venv
       - dev-db-data:/app/db
 
