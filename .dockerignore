@@ -29,7 +29,6 @@ docker-compose*.yml
 .idea/
 
 # Documentation and README
-README.md
 LICENSE
 
 # Database and media (for development)

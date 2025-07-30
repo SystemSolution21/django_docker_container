@@ -1,19 +1,28 @@
-from pathlib import Path
-
 import markdown
 from django.shortcuts import render
 
-BASE_DIR: Path = Path(__file__).resolve().parent.parent.parent
-
-README: Path = Path(BASE_DIR / "README.md")
+from .models import HomePageContent
 
 
 def home_view(request):
-    with open(file=README, mode="r", encoding="utf-8") as f:
-        readme: str = f.read()
-        html_readme: str = markdown.markdown(text=readme, extensions=["fenced_code"])
+    # This single query safely handles all cases:
+    # 1. Finds the active content.
+    # 2. If multiple are active, it picks the most recently created one.
+    # 3. If none are active, it returns `None` without raising an error.
+    page_content = (
+        HomePageContent.objects.filter(is_active=True).order_by("-id").first()
+    )
+
+    if page_content:
+        html_content = markdown.markdown(
+            text=page_content.content, extensions=["fenced_code"]
+        )
+    else:
+        # Set a default message if no content was found.
+        html_content = "<h1>Welcome!</h1><p>No active home page content found. Please create one in the admin panel.</p>"
+
     return render(
         request=request,
         template_name="home.html",
-        context={"readme_content": html_readme},
+        context={"readme_content": html_content},
     )

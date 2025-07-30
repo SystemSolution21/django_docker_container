@@ -5,12 +5,14 @@ services:
     build: .
     image: django-docker-container-image:v0.1.0
     ports:
-      - "8001:8000"
+      - "8000:8000"
     env_file:
       - ./.env.dev
     volumes:
-      - ./src:/app
+      - ./src/:/app/
+      - venv:/app/.venv
       - dev-db-data:/app/db
 
 volumes:
   dev-db-data:
+  venv:

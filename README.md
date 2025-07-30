@@ -1,78 +1,26 @@
 # Django Docker Container
 
-## Django application run in Docker container
+This project is a **modern and well-structured for a Django web application**, designed to be developed and run inside a Docker container. It serves as an excellent starting point for building new applications, incorporating many current best practices.
+<br>
+
+## Core Technology Stack
+
+* **Backend:** Django `5.2.4`
+* **Language:** Python `3.13`
+* **Package Management:** `uv`, a fast and modern Python package installer and resolver. Dependencies are locked in `uv.lock` for reproducible builds.
+* **Containerization:** Docker and Docker Compose provide a consistent and isolated development environment.
 
 <br>
 
-## Requirements
+## Key Features & Characteristics
 
-- Docker
-- Python 3.13
-- uv
+**1.Container-First Design:** The entire setup is built around Docker. The `Dockerfile` is optimized for security (by creating a non-root `django` user) and reproducibility. The `docker-compose.yml` file orchestrates the application service, making it easy to start, stop, and manage.
 
-<br>
+**2.Excellent Development Workflow:**<br>
+    **(a).Live Code Reloading:** The use of volumes in `docker-compose.yml` (`./src/:/app/`) means any changes make to source code on local machine are instantly reflected inside the running container without needing to rebuild the image.<br>
+    **(b).Automatic Browser Refresh:** The inclusion of `django-browser-reload` in dependencies enhances the development experience by automatically refreshing web browser when a file is saved.<br>
+    **(c).Dynamic Frontend with HTMX:** The project uses `django-htmx`, allowing to build modern, interactive user interfaces with the power of AJAX but without writing complex JavaScript.
 
-## Create Virtual Environment and Activate
+**3.Robust User Authentication:** It integrates `django-allauth`, a comprehensive package that handles user registration, login, password management, and social account authentication right out of the box.
 
-```pwsh
-uv venv
-.venv\Scripts\activate
-```
-
-<br>
-
-## Dependencies Installation
-
-```pwsh
-uv sync
-```
-
-<br>
-
-## Run Docker Container
-
-- Build image:
-
-```pwsh
-docker build -t django-docker-project-image:v0.1.0 .
-```
-
-- Run container:
-
-```pwsh
-docker compose up -d
-```
-
-- Rebuild and run container:
-
-```pwsh
-docker compose up --build -d
-```
-
-<br>
-
-## Generate secret key(if required)
-
-```pwsh
-uv run python manage.py shell
-from django.core.management.utils import get_random_secret_key
-print(get_random_secret_key())
-exit()
-```
-
-<br>
-
-## Database Migrations
-
-```pwsh
-uv run python manage.py makemigrations
-uv run python manage.py migrate
-```
-
-<br>
-
-## Run Django Application locally
-
-```pwsh
-uv run python manage.py runserver
-```
+**4.Dynamic Homepage Content:** The homepage content is managed dynamically through the Django admin panel. A `HomePageContent` model allows an administrator to create and edit the content in Markdown format, which is then retrieved from the database and rendered on the fly. This provides a flexible and powerful way to manage site content without changing code.
