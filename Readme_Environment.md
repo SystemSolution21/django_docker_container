@@ -16,6 +16,7 @@
 
 ```pwsh
 uv venv
+or uv venv --python 3.13
 .venv\Scripts\activate
 ```
 
@@ -34,7 +35,7 @@ uv sync
 - Build image:
 
 ```pwsh
-docker build -t django-docker-project-image:v0.1.0 .
+docker build -t django-docker-container-image:v0.1.0 .
 ```
 
 - Run container:
@@ -46,7 +47,7 @@ docker compose up -d
 - Rebuild and run container:
 
 ```pwsh
-docker compose up --build -d
+docker compose up -d --build
 ```
 
 <br>
@@ -54,7 +55,7 @@ docker compose up --build -d
 ## Generate secret key(if required)
 
 ```pwsh
-uv run python manage.py shell
+uv run manage.py shell
 from django.core.management.utils import get_random_secret_key
 print(get_random_secret_key())
 exit()
@@ -65,8 +66,8 @@ exit()
 ## Database Migrations
 
 ```pwsh
-uv run python manage.py makemigrations
-uv run python manage.py migrate
+uv run manage.py makemigrations
+uv run manage.py migrate
 ```
 
 <br>
@@ -74,5 +75,5 @@ uv run python manage.py migrate
 ## Run Django Application locally
 
 ```pwsh
-uv run python manage.py runserver
+uv run manage.py runserver
 ```
