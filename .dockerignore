@@ -37,7 +37,7 @@ media/
 
 # Logs and temporary files
 *.log
-.cache/
+**/.cache/
 
 # Test-related
 .pytest_cache/

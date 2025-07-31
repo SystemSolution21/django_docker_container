@@ -7,7 +7,12 @@ class HomePageContent(models.Model):
 
     title = models.CharField(_("Title"), max_length=200)
     content = models.TextField(
-        _("Content"), help_text=_("Content is stored in HTML format.")
+        _("Content"),
+        help_text=_(
+            "Content can be written in Markdown or HTML. To parse Markdown inside an HTML block, add the attribute "
+            '`markdown="1"` to the tag. Example: &lt;div markdown="1"&gt;# A Header&lt;/div&gt;. '
+            'Note: Use the "Source Code" view in the editor when adding blocks with `markdown="1"`.'
+        ),
     )
     is_active = models.BooleanField(
         _("Is Active"),

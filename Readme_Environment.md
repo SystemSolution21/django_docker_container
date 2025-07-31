@@ -65,6 +65,15 @@ exit()
 
 ## Database Migrations
 
+Run migrations in Docker container:
+
+```pwsh
+docker compose exec app uv run python manage.py makemigrations
+docker compose exec app uv run python manage.py migrate
+```
+
+Run migrations locally:
+
 ```pwsh
 uv run manage.py makemigrations
 uv run manage.py migrate
