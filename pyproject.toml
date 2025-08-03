@@ -19,3 +19,12 @@ dependencies = [
     "sqlparse==0.5.3",
     "tzdata==2025.2",
 ]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.1",
+]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "django_docker_container.settings"
+python_files = ["tests.py", "test_*.py", "*_tests.py"]

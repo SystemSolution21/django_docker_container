@@ -81,7 +81,18 @@ uv run manage.py migrate
 
 <br>
 
-## Run Django Application locally
+## Create SuperUser for development
+
+```pwsh
+uv run manage.py createsuperuser
+SuperUser = admin
+email = <admin@test.com>
+Password = admin
+```
+
+<br>
+
+## Run Django locally
 
 ```pwsh
 uv run manage.py runserver

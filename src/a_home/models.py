@@ -1,4 +1,5 @@
-from django.db import models
+from django.core.cache import cache
+from django.db import models, transaction
 from django.utils.translation import gettext_lazy as _
 
 
@@ -23,15 +24,23 @@ class HomePageContent(models.Model):
     )
 
     def save(self, *args, **kwargs):
-        # If this instance is being marked as active, ensure no other instances are.
-        if self.is_active:
-            # Select all other active instances and update them to be inactive.
-            # .exclude(pk=self.pk) is important to ensure we don't deactivate
-            # the current instance if it's being updated.
-            HomePageContent.objects.filter(is_active=True).exclude(pk=self.pk).update(
-                is_active=False
-            )
-        super().save(*args, **kwargs)
+        # Wrap the logic in a transaction to ensure atomicity.
+        with transaction.atomic():
+            # If this instance is being marked as active, ensure no other
+            # instances are.
+            if self.is_active:
+                # Select all other active instances and update them to be inactive.
+                # .exclude(pk=self.pk) is important to ensure we don't
+                # deactivate the current instance if it's being updated.
+                HomePageContent.objects.filter(is_active=True).exclude(
+                    pk=self.pk
+                ).update(is_active=False)
+            # Save the current instance
+            super().save(*args, **kwargs)
+
+        # Clear the cache whenever any HomePageContent is saved to ensure
+        # the home page reflects the latest changes.
+        cache.delete("home_page_html_content")
 
     def __str__(self):
         return self.title

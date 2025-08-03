@@ -1,5 +1,6 @@
 import bleach
 import markdown
+from django.core.cache import cache
 from django.shortcuts import render
 
 from .models import HomePageContent
@@ -56,30 +57,40 @@ ALLOWED_ATTRIBUTES = {
 
 
 def home_view(request):
-    # This single query safely handles all cases:
-    # 1. Finds the active content.
-    # 2. If multiple are active, it picks the most recently created one.
-    # 3. If none are active, it returns `None` without raising an error.
-    page_content = (
-        HomePageContent.objects.filter(is_active=True).order_by("-id").first()
-    )
+    # Define a unique cache key for the home page content.
+    cache_key = "home_page_html_content"
+    html_content = cache.get(cache_key)
 
-    if page_content:
-        # 1. Convert Markdown to potentially unsafe HTML.
-        unsafe_html = markdown.markdown(
-            page_content.content, extensions=MARKDOWN_EXTENSIONS
+    if html_content is None:
+        # If content is not in cache, generate it from the database.
+        # This single query safely handles all cases:
+        # 1. Finds the active content.
+        # 2. If multiple are active, it picks the most recently created one.
+        # 3. If none are active, it returns `None` without raising an error.
+        page_content = (
+            HomePageContent.objects.filter(is_active=True).order_by("-id").first()
         )
 
-        # 2. Sanitize the HTML to prevent XSS, stripping any disallowed elements.
-        html_content = bleach.clean(
-            unsafe_html,
-            tags=ALLOWED_TAGS,
-            attributes=ALLOWED_ATTRIBUTES,
-            strip=True,
-        )
-    else:
-        # Set a default message if no content was found.
-        html_content = "<h1>Welcome!</h1><p>No active home page content found. Please create one in the admin panel.</p>"
+        if page_content:
+            # 1. Convert Markdown to potentially unsafe HTML.
+            unsafe_html = markdown.markdown(
+                page_content.content, extensions=MARKDOWN_EXTENSIONS
+            )
+
+            # 2. Sanitize the HTML to prevent XSS, stripping any disallowed elements.
+            html_content = bleach.clean(
+                unsafe_html,
+                tags=ALLOWED_TAGS,
+                attributes=ALLOWED_ATTRIBUTES,
+                strip=True,
+            )
+        else:
+            # Set a default message if no content was found.
+            html_content = "<h1>Welcome!</h1><p>No active home page content found. Please create one in the admin panel.</p>"
+
+        # Store the generated HTML in the cache for future requests.
+        # It will stay in the cache until it's manually invalidated.
+        cache.set(cache_key, html_content, timeout=None)
 
     return render(
         request=request,
